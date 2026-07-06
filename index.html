@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Connect Drive 1.0</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        background: #f5f7fa;
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+
+      .logo-top {
+        margin-bottom: 25px;
+      }
+
+      .card-full {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 430px;
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 35px;
+        box-shadow: 0 30px 50px rgba(0, 0, 0, 0.12);
+        border: 1px solid #eeeeee;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .logo svg {
+        width: 34px;
+        height: 34px;
+        fill: #2563eb;
+      }
+
+      h2 {
+        font-size: 30px;
+        color: #1f2937;
+        font-weight: bold;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #6b7280;
+        font-size: 14px;
+        margin-bottom: 30px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #374151;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px 14px;
+        margin-bottom: 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: 0.2s;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 13px;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .btn-secondary {
+        background: #444444;
+      }
+
+      .btn-secondary:hover {
+        background: #6e6e6e;
+      }
+
+      .btn-primary {
+        background: #2563eb;
+      }
+
+      .btn-primary:hover {
+        background: #1d4ed8;
+      }
+
+      .btn-primary:active {
+        transform: scale(0.98);
+      }
+
+      .container {
+        min-height: 100vh;
+
+        display: flex;
+        flex-direction: column;
+
+        justify-content: center;
+        align-items: center;
+
+        padding: 20px;
+      }
+
+      #status {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+        color: #2563eb;
+        min-height: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="logo-top">
+        <img src="./public/TIFICO.png" alt="Logo" width="200" />
+      </div>
+      <div class="card-full">
+        <div class="card">
+          <div class="logo">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
+            10-4.48 10-10S17.52 2 12 2zm-1
+            17.93c-3.95-.49-7-3.85-7-7.93
+            0-.62.08-1.21.21-1.79L9
+            15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55
+            0 1-.45 1-1V7h2c1.1 0
+            2-.9 2-2v-.41c2.93 1.19 5 4.06
+            5 7.41 0 2.08-.8 3.97-2.1 5.39z"
+              />
+            </svg>
+
+            <h2>Akses Corporate</h2>
+          </div>
+
+          <div class="subtitle">Sharing folder menggunakan akun anda ?</div>
+
+          <form id="loginForm">
+            <label>User name</label>
+
+            <input id="username" placeholder="username" required />
+
+            <label>Password</label>
+
+            <input
+              id="password"
+              type="password"
+              placeholder="password"
+              required
+            />
+
+            <button type="submit" class="btn btn-primary">Sign In</button>
+          </form>
+          <div id="status"></div>
+          <button id="gmailBtn" class="btn btn-secondary">Open Chrome</button>
+        </div>
+
+        <script src="renderer.js"></script>
+      </div>
+    </div>
+  </body>
+</html>
