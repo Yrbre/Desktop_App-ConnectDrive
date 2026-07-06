@@ -14,5 +14,24 @@
   },
   "dependencies": {
     "dotenv": "^17.4.2"
+  },
+  "build": {
+    "appId": "com.bariqfajar.connectdrive",
+    "productName": "Connect Drive",
+    "directories": {
+      "buildResources": "build"
+    },
+    "extraResources": [
+      {
+        "from": ".env",
+        "to": ".env"
+      }
+    ],
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "include": "build/installer.nsh"
+    }
   }
 }

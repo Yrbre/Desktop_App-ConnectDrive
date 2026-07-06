@@ -1,12 +1,42 @@
-require("dotenv").config();
-
 const { app, BrowserWindow, ipcMain, shell } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const { exec, spawn } = require("child_process");
+const { spawn } = require("child_process");
+const { config } = require("dotenv");
+
+config({
+  path: app.isPackaged
+    ? path.join(process.resourcesPath, ".env")
+    : path.join(__dirname, ".env"),
+});
+
 const sharingDrive = process.env.SHARING_DRIVE;
 const driveLetter = process.env.DRIVE_LETTER;
 let mainWindow;
+
+function runNetUse(args) {
+  return new Promise((resolve) => {
+    const child = spawn("net", args, { windowsHide: true });
+    let stdout = "";
+    let stderr = "";
+
+    child.stdout.on("data", (data) => {
+      stdout += data.toString();
+    });
+
+    child.stderr.on("data", (data) => {
+      stderr += data.toString();
+    });
+
+    child.on("error", (error) => {
+      resolve({ code: -1, stdout, stderr: error.message });
+    });
+
+    child.on("close", (code) => {
+      resolve({ code, stdout, stderr });
+    });
+  });
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -44,27 +74,41 @@ app.on("window-all-closed", () => {
 =========================================== */
 
 ipcMain.handle("connect-drive", async (event, username, password) => {
-  return new Promise((resolve) => {
-    exec("net use Z: /delete /y", () => {
-      const cmd = `net use ${driveLetter} ${sharingDrive} "${password}" /user:${username} /persistent:no`;
+  if (!sharingDrive || !driveLetter) {
+    return {
+      success: false,
+      message: "Konfigurasi SHARING_DRIVE atau DRIVE_LETTER belum diisi.",
+    };
+  }
 
-      exec(cmd, (error, stdout, stderr) => {
-        if (error) {
-          resolve({
-            success: false,
-            message: stderr || error.message,
-          });
+  const deleteResult = await runNetUse(["use", driveLetter, "/delete", "/y"]);
 
-          return;
-        }
+  const connectResult = await runNetUse([
+    "use",
+    driveLetter,
+    sharingDrive,
+    password,
+    `/user:${username}`,
+    "/persistent:no",
+  ]);
 
-        resolve({
-          success: true,
-          message: "Drive berhasil terhubung.",
-        });
-      });
-    });
-  });
+  if (connectResult.code !== 0) {
+    return {
+      success: false,
+      message:
+        connectResult.stderr ||
+        connectResult.stdout ||
+        `Gagal menghubungkan drive. Kode keluar: ${connectResult.code}`,
+    };
+  }
+
+  return {
+    success: true,
+    message:
+      deleteResult.code === 0 || deleteResult.code === 2
+        ? "Drive berhasil terhubung."
+        : "Drive berhasil terhubung.",
+  };
 });
 
 /* ===========================================
